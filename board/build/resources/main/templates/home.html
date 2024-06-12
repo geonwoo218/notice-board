@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+</head>
+<body>
+<ul style="list-style:none;">
+    <li th:each="nList : ${noticeData}" class="nli">
+        <a th:href="@{/boardShow(checkIdx = ${nList.getIdx()})}">
+            <div id="nTitle"><span th:text="${nList.getTitle()}"></span></div>
+            <div id="nName"><span th:text="${nList.getName()}"></span></div>
+            <div id="nDate"><span th:text="${#dates.format(nList.getDate(), 'yy. MM. dd')}"></span></div>
+        </a>
+    </li>
+</ul>
+<div id="pagination" th:if="${endPage > 1}">
+    <ul>
+        <!-- 페이지 번호 표시 -->
+        <li th:each="pageNumber : ${#numbers.sequence(startPage, endPage)}">
+            <a th:href="@{'/?page=' + ${pageNumber}}">
+                            <span th:text="${pageNumber}"
+                                  th:classappend="${pageNumber == noticeData.number + 1} ? 'current-page' : ''">
+                            </span></a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>writeEditPage</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+</head>
+<body>
+
+<div id="leftContainer">
+    <div id="ltop">
+        <div id="logo"><a href="/"><img src="/image/logo2.png" alt=""></a></div>
+        <input type="text" id="search">
+    </div>
+    <div id="lcontent">
+        <!--<input type="text" id="title" placeholder="제목">
+
+                <textarea id="editorTxt" name="editorTxt" placeholder="내용입력"></textarea>
+        -->
+        <form name="bf" action="/editSuccess" method="post" style="background:#000;">
+            <div style="background:white;" id="smarteditor" >
+                <input type="text" id="title" name="title" placeholder="제목" th:value="${notice.getTitle()}">
+                <input type="hidden" id="idx" name="idx" th:value="${notice.getIdx()}">
+                <input type="hidden" id="content" name="content">
+                <textarea name="editorTxt" id="editorTxt" style="width: 97%; margin-left:10px;">
+                   [[${notice.getContent()}]]
+                </textarea>
+            </div>
+        </form>
+
+        <script>
+            let oEditors = []
+
+            smartEditor = function() {
+              console.log("Naver SmartEditor")
+              nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "editorTxt",
+                sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+                fCreator: "createSEditor2"
+              })
+            }
+
+            $(document).ready(function() {
+              smartEditor()
+            })
+
+            function addCheck(){
+                oEditors.getById["editorTxt"].exec("UPDATE_CONTENTS_FIELD", []);
+                let content = document.getElementById("editorTxt").value;
+                document.getElementById('content').value = content;
+                alert("작성하신 글이 수정되었습니다.");
+                bf.submit();
+            }
+        </script>
+    </div>
+</div>
+
+<div id="rightContainer">
+    <div id="rtop">
+        <div id="signout" sec:authorize="isAnonymous()">
+            <input type="button" value="로그인" id="loginBtn" onclick="location.href='/login'">
+            <input type="button" value="회원가입" id="registerBtn" onclick="location.href='/register'">
+        </div>
+
+        <div id="signin" sec:authorize="isAuthenticated()">
+            <div id="username">
+                <span th:text="${userName}"></span>님
+            </div>
+            <form action="/logout" method="post">
+                <input type="submit" value="로그아웃" id="logoutBtn">
+            </form>
+        </div>
+    </div>
+
+    <div id="rcontent">
+        <div id="profile">
+            <div sec:authorize="isAnonymous()" style="text-align:center; margin-top:20px;">로그인을 해주세요</div>
+            <div sec:authorize="isAuthenticated()">
+                <div id="pImg"><img src="/image/선글라스고양이.png" alt="프로필"></div>
+                <div id="pUserName"><span th:text="${userName}">롸이트에딧페이지</span></div>
+                <div id="pUserEmail"><span th:text="${userEmail}"></span></div>
+            </div>
+        </div>
+        <div id="write">
+            <input type="button" value="수정하기" id="writeBtn" class="home" onclick="addCheck()">
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

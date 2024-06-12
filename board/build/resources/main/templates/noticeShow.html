@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>노티스쑈페이지</title> <!-- th:text="${resNotice.getTitle()}"-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&display=swap" rel="stylesheet">
+    <script src="/js/write.js"></script>
+</head>
+<body>
+
+<div id="leftContainer">
+    <div id="ltop">
+        <div id="logo"><a href="/"><img src="/image/logo2.png" alt=""></a></div>
+        <input type="text" id="search">
+    </div>
+    <div id="lcontent">
+        <div id="nsWrap">
+            <div id="nsTop">
+                <div id="nsTitle" th:text="${resNotice.getTitle()}"></div>
+                <div id="nsND">
+                    <div id="nsName" th:text="${resNotice.getName()}"></div>
+                    <div id="nsDate" th:text="${resNotice.getDate()}"></div>
+                </div>
+                </div>
+            <div id="nsContent" th:utext="${resNotice.getContent()}"></div>
+
+        </div>
+    </div>
+    <div id="comments">
+        <input type="text" placeholder="댓글을 쓰기" id="cInput">
+        <input type="button" value="쓰기" id="addComment" class="home">
+        <input type="button" value="보기" id="openComment" class="home" onclick="openComment()">
+        <div id="commentList">
+
+        </div>
+    </div>
+</div>
+
+<div id="rightContainer">
+    <div id="rtop">
+        <div id="signout" sec:authorize="isAnonymous()">
+            <input type="button" value="로그인" id="loginBtn" onclick="location.href='/login'">
+            <input type="button" value="회원가입" id="registerBtn" onclick="location.href='/register'">
+        </div>
+
+        <div id="signin" sec:authorize="isAuthenticated()">
+            <div id="username">
+                <span th:text="${userName}"></span>님
+            </div>
+            <form action="/logout" method="post">
+                <input type="submit" value="로그아웃" id="logoutBtn">
+            </form>
+        </div>
+    </div>
+
+    <div id="rcontent">
+        <div id="profile">
+            <div sec:authorize="isAnonymous()" style="text-align:center; margin-top:20px;">로그인을 해주세요</div>
+            <div sec:authorize="isAuthenticated()">
+                <div id="pImg"><img src="/image/선글라스고양이.png" alt="프로필"></div>
+                <div id="pUserName"><span th:text="${userName}">노티스쑈페이지</span></div>
+                <div id="pUserEmail"><span th:text="${userEmail}"></span></div>
+            </div>
+            <div th:if="${#authorization.expression('isAuthenticated()')}">
+                <div id="modify" th:if="${#authorization.expression('hasRole(''ADMIN'')')}
+                        or ${userName} == ${resNotice.getName()}">
+
+                    <form action="/goNoticeEditPage" method="post">
+                        <input type="hidden" th:value="${resNotice.getIdx()}" name="idx">
+                        <input type="submit" id="updateWBtn" value="수정" class="home">
+                    </form>
+
+                    <form action="/boardShow/deleteW" method="post" id="deleteWForm">
+                        <input type="hidden" name="idx" th:value="${resNotice.getIdx()}">
+                        <input type="button" id="deleteWBtn" value="삭제" class="home" onclick="deleteW()">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="write">
+            <input type="button" value="HOME" id="writeBtn" class="home" onclick="location.href='/'">
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="/css/Register.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/RegisterScript.js" defer></script>
+</head>
+
+<body>
+
+<div id="title">회원가입</div>
+
+<form action="/submit_registration" method="post" id="regForm">
+    <div class="set">
+        <label for="name">사용자 이름</label>
+        <input type="text" id="name" name="name" required>
+        <input type="button" onclick="check_name()" value="확인하기" id="checkname" class="checkBtn">
+        <div class="ment">영어,한글,숫자,언더바 외 사용불가능</div>
+    </div>
+    <div class="set">
+        <label for="email">이메일</label>
+        <input type="email" id="email" name="email" required>
+        <input type="button" onclick="emailSend()" value="인증번호 받기" id="checkemail" class="checkBtn">
+    </div>
+    <div class="set">
+        <label for="emailCheck">인증번호</label>
+        <input type="number" id="emailCheck" required>
+        <input type="button" onclick="mailCheck()" value="인증" id="eCheckBtn" class="checkBtn">
+    </div>
+    <div class="set">
+        <label for="pwd">비밀번호</label>
+        <input type="password" id="pwd" name="pwd" required>
+        <div class="ment">영어,숫자,기호,8자이상</div>
+    </div>
+    <div>
+        <label for="confirm_password">비밀번호 확인</label>
+        <input type="password" id="confirm_password" name="confirm_password" required><br><br>
+    </div>
+    <div>
+        <input type="button" value="가입하기" id="submitBtn" onclick="submitForm()">
+    </div>
+</form>
+
+<div class="home" id="rLoginBtn"><a href="/login">로그인</a></div>
+<div class="home"><a href="/">HOME</a></div>
+</body>
+</html>

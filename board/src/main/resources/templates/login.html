@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/Login.css" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&display=swap" rel="stylesheet">
+    <script src="/js/login.js" defer></script>
+    <title>login</title>
+</head>
+
+<body>
+<script th:if="${error == 'true'}">
+    alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해 주세요.");
+</script>
+<div id="title">로그인</div>
+
+<form action="/loginpro" method="post">
+    <div class="set">
+        <label for="name">이름</label>
+        <input type="text" id="name" name="name" required><br><br>
+    </div>
+    <div>
+        <label for="pwd">비밀번호</label>
+        <input type="password" id="pwd" name="pwd" required><br><br>
+    </div>
+    <div id="forget" onclick="forgetPwd()">비밀번호 잊어버렸나요?</div>
+    <div>
+        <input type="submit" value="로그인하기">
+    </div>
+</form>
+
+<div class="home" id="lRegisterBtn"><a href="/register">회원가입</a></div>
+<div class="home"><a href="/">HOME</a></div>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인페이지</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+<div id="leftContainer">
+    <div id="ltop">
+        <div id="logo"><img src="/image/logo2.png" alt=""></div>
+        <input type="text" id="search" placeholder="검색">
+    </div>
+    <div id="lcontent">
+        <div id="list">
+            <div id="nTh">
+                <div id="nThTitle" class="nth">제목</div>
+                <div id="nThWriter" class="nth">작성자</div>
+                <div id="nThDate" class="nth">작성일</div>
+            </div>
+            <ol id="olol">
+                <li th:each="nList : ${noticeData}" class="nli">
+
+                    <a th:href="@{/boardShow(checkIdx = ${nList.getIdx()})}">
+                    <div id="nTitle"><span th:text="${nList.getTitle()}"></span></div>
+                    <div id="nName"><span th:text="${nList.getName()}"></span></div>
+                    <div id="nDate"><span th:text="${#dates.format(nList.getDate(), 'yy. MM. dd')}"></span></div>
+                    </a>
+                </li>
+            </ol>
+            <div id="pagination" th:if="${endPage > 1}">
+                <ul>
+                    <!-- 페이지 번호 표시 -->
+                    <li th:each="pageNumber : ${#numbers.sequence(startPage, endPage)}">
+                        <a th:href="@{'/?page=' + ${pageNumber}}">
+                            <span th:text="${pageNumber}"
+                             th:classappend="${pageNumber == noticeData.number + 1} ? 'current-page' : ''" th:onclick="setOlNum(${pageNumber})">
+                            </span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="rightContainer">
+    <div id="rtop">
+        <div id="signout" sec:authorize="isAnonymous()">
+            <input type="button" value="로그인" id="loginBtn" onclick="location.href='/login'">
+            <input type="button" value="회원가입" id="registerBtn" onclick="location.href='/register'">
+        </div>
+
+        <div id="signin" sec:authorize="isAuthenticated()">
+            <div id="username">
+                <span th:text="${userName}"></span>님
+            </div>
+            <form action="/logout" method="post">
+                <input type="submit" value="로그아웃" id="logoutBtn">
+            </form>
+        </div>
+    </div>
+
+
+    <div id="rcontent">
+        <div id="profile">
+            <div sec:authorize="isAnonymous()" style="text-align:center; margin-top:20px;">
+             <p>내정보</p>
+                <p>로그인을 해주세요</p>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <div id="pImg"><img src="/image/선글라스고양이.png" alt="프로필"></div>
+                <div id="pUserName"><span th:text="${userName}"></span></div>
+                <div id="pUserEmail"><span th:text="${userEmail}"></span></div>
+            </div>
+        </div>
+        <input type="button" value="WRITE" id="write" class="home" onclick="location.href='/write'">
+    </div>
+</div>
+<form action="">
+
+</form>
+<script>
+    function setOlNum(pageNumber) {
+        let startPageNum = (pageNumber - 1) * 12 + 1;
+        document.getElementById('olol').setAttribute('start',startPageNum);
+    }
+</script>
+</body>
+
+</html>
