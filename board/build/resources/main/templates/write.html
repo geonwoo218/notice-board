@@ -29,7 +29,6 @@
                 <input type="hidden" id="content" name="content">
                 <textarea name="editorTxt" id="editorTxt"
                   rows="20" cols="10"
-                  placeholder="내용을 입력해주세요"
                   style="width: 97%; margin-left:10px;"></textarea>
             </div>
         </form>
@@ -55,7 +54,12 @@
                 oEditors.getById["editorTxt"].exec("UPDATE_CONTENTS_FIELD", []);
                 let content = document.getElementById("editorTxt").value;
                 document.getElementById('content').value = content;
+                if(!content || !document.getElementById("title").value){
+                    alert("제목 또는 내용을 확인해 주세요");
+                    return;
+                }
                 alert("작성하신 글이 게시되었습니다.");
+
                 bf.submit();
             }
         </script>

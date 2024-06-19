@@ -31,25 +31,10 @@
 
         </div>
     </div>
-    <div id="comments">
-        <form action="/comment/write" method="post">
-            <input type="submit" placeholder="댓글을 쓰기" id="cInput">
-            <input type="button" value="쓰기" id="addComment" class="home">
-            <input type="button" value="보기" id="openComment" class="home" onclick="openComment()">
-        </form>
-        <div id="commentList">
-            <ol id="olol">
-                <li th:each="cList : ${noticeData}" class="cli">
 
-                    <a th:href="@{/boardShow(checkIdx = ${cList.getIdx()})}">
-                        <div id="cName"><span th:text="${cList.getUsername()}"></span></div>
-                        <div id="cComment"><span th:text="${cList.getComment()}"></span></div>
-                        <div id="cDate"><span th:text="${#dates.format(cList.getDate(), 'yy. MM. dd')}"></span></div>
-                    </a>
-                </li>
-            </ol>
-        </div>
+    <div id="comments">
     </div>
+
 </div>
 
 <div id="rightContainer">
