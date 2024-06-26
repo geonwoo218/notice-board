@@ -88,8 +88,12 @@ public class NoticeService {
         int page = pageable.getPageNumber() - 1;
         int pageLimit = 12;
 
-        Page<Notice> notice = noticeRepository.findAllByOrderByIdxDesc(PageRequest.of(page, pageLimit));
-        return notice;
+        return noticeRepository.findAllByOrderByIdxDesc(PageRequest.of(page, pageLimit));
     }
 
+    public Page<Notice> noticeSearch(String searchKeyword, Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        int pageLimit = 12;
+        return noticeRepository.findByTitleContaining(searchKeyword, PageRequest.of(page, pageLimit));
+    }
 }

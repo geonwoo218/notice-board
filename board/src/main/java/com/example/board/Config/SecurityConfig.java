@@ -44,7 +44,7 @@ public class SecurityConfig {
             authorize.requestMatchers("/css/**","/js/**","/image/**","smarteditor/**",
                     "/loginpro","/login","/loginError",
                     "/register","/submit_registration","/submit_username","/mailSend","/mailCheck",
-                    "/","/boardShow").permitAll();
+                    "/","/boardShow","/search").permitAll();
             authorize.requestMatchers("/**","/write").hasRole("USER");
         });
         return http.build();

@@ -168,6 +168,33 @@ function submitForm(){
 
     }
 
+    document.getElementById("profileModal").addEventListener('click',()=>{
+        document.getElementById("profileModal").style.display = "block";
+        const imageList = document.querySelectorAll('#imageList li img');
+        let selectedImageIndex = null;
 
+        imageList.forEach((img, index) => {
+            img.addEventListener('click', () => {
+                // Remove selected class from all images
+                imageList.forEach(img => img.classList.remove('selected'));
+                // Add selected class to the clicked image
+                img.classList.add('selected');
+                // Set selected image index
+                selectedImageIndex = index + 1; // Index starts from 1
+            });
+        });
+    });
 
+    document.getElementById('confirmBtn').addEventListener('click', () => {
+        if (selectedImageIndex !== null) {
+            console.log('Selected Image Index:', selectedImageIndex);
+            // Here you can handle the selected image index value as needed
+        } else {
+            alert('이미지를 선택해주세요.');
+        }
+    });
+
+    document.getElementById('pModalCloseBtn').addEventListener('click', () => {
+        document.getElementById('profileModal').style.display = 'none';
+    });
 }

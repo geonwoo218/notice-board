@@ -1,9 +1,12 @@
 package com.example.board.Service;
 
+import com.example.board.Entity.Notice;
 import com.example.board.Entity.Role;
 import com.example.board.Entity.User;
+import com.example.board.Repository.NoticeRepository;
 import com.example.board.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,10 +16,12 @@ import org.springframework.ui.Model;
 
 
 import javax.swing.text.html.Option;
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +29,8 @@ public class UserService implements UserDetailsService{
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private NoticeRepository noticeRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -73,5 +80,10 @@ public class UserService implements UserDetailsService{
             System.out.println("no");
             return "no";
         }
+    }
+
+    public List<Notice> noticeSearch(String searchKeyword, Page<Notice> pageable){
+       // return noticeRepository.findByTitleContaining(searchKeyword);
+        return null;
     }
 }

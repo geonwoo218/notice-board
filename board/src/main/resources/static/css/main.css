@@ -1,6 +1,5 @@
 *{
     margin: 0 auto;
-    padding: 0;
 }
 body{
     width: 100%;
@@ -34,19 +33,28 @@ body{
     width: 150px;
     height: 100%;
 }
-#search{
-    width: calc(100% - 210px);
+#searchTitle{
+    width: calc(100% - 260px);
     height: 60%;
     background-color: #000000;
-    float: right;
+    float: left;
     color: #fff;
     padding-left: 10px;
-    margin-right: 35px;
+    margin-right: 10px;
+    margin-left: 10px;
     margin-top: 20px;
     border: 3px solid;
     font-size: 21px;
     box-sizing: border-box;
     letter-spacing: 2px;
+}
+#searchIcon{
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin-top: 20px;
+    border : none;
+    background-color:#000;
 }
 /*========lcontent==========*/
 #lcontent{

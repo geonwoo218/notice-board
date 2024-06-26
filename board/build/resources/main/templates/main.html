@@ -8,14 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
 <div id="leftContainer">
     <div id="ltop">
-        <div id="logo"><img src="/image/logo2.png" alt=""></div>
-        <input type="text" id="search" placeholder="검색">
+        <div id="logo"><a href="/"><img src="/image/logo2.png" alt=""></a></div>
+        <input type="text" id="searchTitle" placeholder="검색" name="searchTitle">
+        <img src="/image/search-icon.png" alt="검색아이콘" id="searchIcon" class="home" onclick="search()">
     </div>
     <div id="lcontent">
         <div id="list">
@@ -90,6 +90,7 @@
         document.getElementById('olol').setAttribute('start',startPageNum);
     }
 </script>
+<script src="/js/js.js"></script>
 </body>
 
 </html>

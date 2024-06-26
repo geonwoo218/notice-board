@@ -81,10 +81,36 @@ public class UserController {
         model.addAttribute("endPage",endPage);
         model.addAttribute("startPage",startPage);
         model.addAttribute("noticeData", noticePages);
-
+        System.out.println("noticePtages:::" + noticePages);
         return "main";
 
     }
 
+    @GetMapping("/search")
+    public String search(@RequestParam String title, Model model,
+                         @AuthenticationPrincipal User user,
+                         @PageableDefault(page = 1) Pageable pageable){
+        List<User> users = userRepository.findAll();
+        model.addAttribute("users", users);
+        if (user == null) {
+            model.addAttribute("userName", "none");
+            model.addAttribute("userEmail", "none");
+
+        } else {
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("userEmail",user.getEmail());
+        }
+        System.out.println("searchTitle: "+title);
+        Page<Notice> noticePages = noticeService.noticeSearch(title,pageable);
+
+        int blockLimit = 3;
+        int startPage = (((int) Math.ceil(((double) pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+        int endPage = Math.min((startPage + blockLimit - 1), noticePages.getTotalPages());
+        model.addAttribute("endPage",endPage);
+        model.addAttribute("startPage",startPage);
+        model.addAttribute("noticeData", noticePages);
+        System.out.println("noticePages "+noticePages);
+        return "main";
+    }
 }
 
