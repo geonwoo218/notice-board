@@ -2,7 +2,6 @@ var regForm = document.getElementById("regForm");
 var FName = regForm.name.value;
 const namePatten = /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9_()]+$/;
 var FPwd = regForm.pwd.value;
-//const pwdPatten = /^(?!.*\s)(?!.*[ㄱ-ㅎㅏ-ㅣ가-힣]).{8,}$/;
 
 var isName = false; //이름 중복체크
 var emailNum = false; //인증번호확인체크
@@ -154,7 +153,6 @@ function submitForm(){
         return;
     }
 
-
     if(isName && emailNum){
         try{
             alert("회원가입이 되었습니다.");
@@ -167,34 +165,45 @@ function submitForm(){
         document.getElementById('email').disabled = true;
 
     }
-
-    document.getElementById("profileModal").addEventListener('click',()=>{
-        document.getElementById("profileModal").style.display = "block";
-        const imageList = document.querySelectorAll('#imageList li img');
-        let selectedImageIndex = null;
-
-        imageList.forEach((img, index) => {
-            img.addEventListener('click', () => {
-                // Remove selected class from all images
-                imageList.forEach(img => img.classList.remove('selected'));
-                // Add selected class to the clicked image
-                img.classList.add('selected');
-                // Set selected image index
-                selectedImageIndex = index + 1; // Index starts from 1
-            });
-        });
-    });
-
-    document.getElementById('confirmBtn').addEventListener('click', () => {
-        if (selectedImageIndex !== null) {
-            console.log('Selected Image Index:', selectedImageIndex);
-            // Here you can handle the selected image index value as needed
-        } else {
-            alert('이미지를 선택해주세요.');
-        }
-    });
-
-    document.getElementById('pModalCloseBtn').addEventListener('click', () => {
-        document.getElementById('profileModal').style.display = 'none';
-    });
 }
+
+function openProfile(){
+    document.getElementById('profileModal').style.display = 'block';
+}
+
+
+
+// 이미지 선택 처리
+const imageList = document.querySelectorAll('#imageList li img');
+
+
+imageList.forEach((img, index) => {
+    img.addEventListener('click', () => {
+        // 모든 이미지의 'selected' 클래스 제거
+        imageList.forEach(img => img.classList.remove('selected'));
+        // 클릭한 이미지에 'selected' 클래스 추가
+        img.classList.add('selected');
+    });
+});
+
+// 확인 버튼 클릭 시 선택한 이미지 번호 설정
+document.getElementById('confirmBtn').addEventListener('click', () => {
+        let selectedImageIndex = null;
+        console.log("selectImg: "+selectedImageIndex);
+        imageList.forEach((img, index)=>{
+            index++;
+            if(img.classList.contains('selected')){
+                selectedImageIndex = index;
+            }
+        })
+        console.log("selectedImg: "+selectedImageIndex);
+    if (selectedImageIndex !== null) {
+        regForm.imgNum.value = selectedImageIndex;
+        document.getElementById('profileModal').style.display = 'none'; // 모달 닫기
+    } else {
+        alert('이미지를 선택해주세요.');
+    }
+});
+
+
+
