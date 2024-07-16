@@ -71,6 +71,8 @@ public class UserController {
         } else {
             model.addAttribute("userName", user.getName());
             model.addAttribute("userEmail",user.getEmail());
+            int img = userService.getImgNumber(user.getIdx());
+            model.addAttribute("profileImg","/image/img" + img + ".png");
         }
 
         Page<Notice> noticePages = noticeService.paging(pageable);

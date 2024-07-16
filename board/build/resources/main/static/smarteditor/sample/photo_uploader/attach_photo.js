@@ -330,25 +330,25 @@
      * HTML5 DragAndDrop으로 사진을 추가하고, 확인버튼을 누른 경우에 동작한다.
      * @return
      */
-    function html5Upload() {	
-    	var tempFile,
-    		sUploadURL;
-    	
-    	sUploadURL= 'file_uploader_html5.php'; 	//upload URL
-    	
-    	//파일을 하나씩 보내고, 결과를 받음.
-    	for(var j=0, k=0; j < nImageInfoCnt; j++) {
-    		tempFile = htImageInfo['img'+j];
-    		try{
-	    		if(!!tempFile){
-	    			//Ajax통신하는 부분. 파일과 업로더할 url을 전달한다.
-	    			callAjaxForHTML5(tempFile,sUploadURL);
-	    			k += 1;
-	    		}
-	    	}catch(e){}
-    		tempFile = null;
-    	}
-	}
+    function html5Upload() {
+            var tempFile,
+                sUploadURL;
+
+            sUploadURL= '/multiImageUploader.do';     //upload URL
+
+            //파일을 하나씩 보내고, 결과를 받음.
+            for(var j=0, k=0; j < nImageInfoCnt; j++) {
+                tempFile = htImageInfo['img'+j];
+                try{
+                    if(!!tempFile){
+                        //Ajax통신하는 부분. 파일과 업로더할 url을 전달한다.
+                        callAjaxForHTML5(tempFile,sUploadURL);
+                        k += 1;
+                    }
+                }catch(e){}
+                tempFile = null;
+            }
+        }
     
     function callAjaxForHTML5 (tempFile, sUploadURL){
     	var oAjax = jindo.$Ajax(sUploadURL, {

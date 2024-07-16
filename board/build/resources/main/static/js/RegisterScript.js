@@ -188,7 +188,7 @@ imageList.forEach((img, index) => {
 
 // 확인 버튼 클릭 시 선택한 이미지 번호 설정
 document.getElementById('confirmBtn').addEventListener('click', () => {
-        let selectedImageIndex = null;
+        let selectedImageIndex = 1;
         console.log("selectImg: "+selectedImageIndex);
         imageList.forEach((img, index)=>{
             index++;
@@ -197,12 +197,11 @@ document.getElementById('confirmBtn').addEventListener('click', () => {
             }
         })
         console.log("selectedImg: "+selectedImageIndex);
-    if (selectedImageIndex !== null) {
-        regForm.imgNum.value = selectedImageIndex;
+
+        regForm.profile_num.value = selectedImageIndex;
         document.getElementById('profileModal').style.display = 'none'; // 모달 닫기
-    } else {
-        alert('이미지를 선택해주세요.');
-    }
+
+
 });
 
 

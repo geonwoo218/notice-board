@@ -23,6 +23,6 @@ public class Comment {
     private String username;
     private String comment;
     private Timestamp commentdate;
-    private Long commentsort;
-    private Long margin;
+    private Long profile_num;
+
 }

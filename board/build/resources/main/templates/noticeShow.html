@@ -9,10 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&display=swap" rel="stylesheet">
-    <script src="/js/write.js"></script>
+    <script src="/js/write.js" defer></script>
 </head>
 <body>
-
 <div id="leftContainer">
     <div id="ltop">
         <div id="logo"><a href="/"><img src="/image/logo2.png" alt=""></a></div>
@@ -27,13 +26,50 @@
                     <div id="nsName" th:text="${resNotice.getName()}"></div>
                     <div id="nsDate" th:text="${resNotice.getDate()}"></div>
                 </div>
-                </div>
-            <div id="nsContent" th:utext="${resNotice.getContent()}"></div>
-
+            </div>
+            <div id="nsContent" th:utext="${resNotice.getContent()}">
+            </div>
+            <input type="button" id="OCBtn" class="home" value="댓글 열기" onclick="openComment(1)">
         </div>
-    </div>
 
-    <div id="comments">
+    </div>
+    <div id="commentBg"></div>
+    <div id="commentModal" >
+        <div th:if="${commentData!=null}" id="cModalTop">
+            <ul id="cList">
+                <li th:each="cList : ${commentData}" class="cli">
+                    <div id="cProfile"><img th:attr="src='/image/img' + ${cList.profile_num} + '.png'" alt=""></div>
+                    <div id="cBody">
+                        <div id="cName"><span th:text="${cList.username}"></span></div>
+                        <div id="cComment"><span th:text="${cList.comment}"></span></div>
+                    </div>
+                    <div id="cBottom">
+                        <div id="cDate"><span th:text="${#dates.format(cList.commentdate, 'yy. MM. dd')}"></span></div>
+                        <div th:if="${#authorization.expression('hasRole(''ADMIN'')')} or ${cList.username} == ${userName}"
+                            id="cDelete">
+                            <form action="/comment/delete" method="get" th:attr="name=${cList.idx}+'cDelete'">
+                                <input type="hidden" th:value="${cList.idx}" name="idx">
+                                <input type="hidden" th:value="${resNotice.getIdx()}" name="boardid">
+                                <input type="submit" value="삭제" id="cDeleteBtn" class="home">
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="cModalBottom">
+            <form action="/comment/write" method="post">
+                <input type="hidden" name="boardid" th:value="${resNotice.getIdx()}">
+                <input type="text" id="cInput" name="comment">
+                <div sec:authorize="isAuthenticated()">
+                    <input type="submit" class="home cSubmit" value="쓰기">
+                </div>
+                <div sec:authorize="isAnonymous()">
+                        <input type="button" class="home cSubmit" value="쓰기" onclick="cWriteWarning()">
+                </div>
+            </form>
+            <div id="cClose" class="home" onclick="openComment(0)">닫기</div>
+        </div>
     </div>
 
 </div>
@@ -59,7 +95,7 @@
         <div id="profile">
             <div sec:authorize="isAnonymous()" style="text-align:center; margin-top:20px;">로그인을 해주세요</div>
             <div sec:authorize="isAuthenticated()">
-                <div id="pImg"><img src="/image/선글라스고양이.png" alt="프로필"></div>
+                <div id="pImg"><img th:attr="src=${profileImg}" alt="프로필"></div>
                 <div id="pUserName"><span th:text="${userName}">노티스쑈페이지</span></div>
                 <div id="pUserEmail"><span th:text="${userEmail}"></span></div>
             </div>
@@ -85,6 +121,12 @@
 
     </div>
 </div>
+<script th:if="${result}">
+    var commentModal = document.getElementById("commentModal");
+    var commentBg = document.getElementById("commentBg");
+    commentModal.style.display = "block";
+    commentBg.style.display = "block";
+</script>
 <script src="/js/js.js"></script>
 </body>
 </html>

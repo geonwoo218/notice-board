@@ -5,6 +5,7 @@ import com.example.board.Entity.Role;
 import com.example.board.Entity.User;
 import com.example.board.Repository.NoticeRepository;
 import com.example.board.Repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,18 +13,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 
-import javax.swing.text.html.Option;
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserService implements UserDetailsService{
 
@@ -42,15 +40,15 @@ public class UserService implements UserDetailsService{
 
            User roleUser = user.get();
            //권한까지 불러오기
-           User authUser = User.builder()
+           return User.builder()
                    .idx(roleUser.getIdx())
                    .name(roleUser.getName())
                    .email(roleUser.getEmail())
                    .pwd(roleUser.getPwd())
                    .date(roleUser.getDate())
                    .role(roleUser.getRole())
+                   .profile_num(roleUser.getProfile_num())
                    .build();
-           return authUser;
        }
        System.out.println(user+"error");
        return null;
@@ -66,6 +64,7 @@ public class UserService implements UserDetailsService{
         user.setPwd(encodedPassword); //비밀번호 저장
 
         user.setRole(Role.USER.getValue()); //role사용
+        log.info(user.getProfile_num().toString());
 
         return userRepository.save(user); //정보 저장
     }
@@ -82,8 +81,11 @@ public class UserService implements UserDetailsService{
         }
     }
 
-    public List<Notice> noticeSearch(String searchKeyword, Page<Notice> pageable){
-       // return noticeRepository.findByTitleContaining(searchKeyword);
-        return null;
+    public int getImgNumber(Long idx) {
+        User user = userRepository.findById(idx).orElse(null);
+        if(user == null) {
+            return 0;
+        }
+        return user.getProfile_num().intValue();
     }
 }

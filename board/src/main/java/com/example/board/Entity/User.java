@@ -27,6 +27,7 @@ public class User implements UserDetails {
     private String pwd;
     private Date date;
     private String role;
+    private Long profile_num;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -41,10 +41,10 @@ public class SecurityConfig {
                 })
                 .httpBasic(h -> h.disable());
         http.authorizeHttpRequests(authorize -> {
-            authorize.requestMatchers("/css/**","/js/**","/image/**","smarteditor/**",
+            authorize.requestMatchers("/css/**","/js/**","/image/**","/NoticeImg/**","smarteditor/**","classpath:/static/NoticeImg/**",
                     "/loginpro","/login","/loginError",
                     "/register","/submit_registration","/submit_username","/mailSend","/mailCheck",
-                    "/","/boardShow","/search").permitAll();
+                    "/","/boardShow","/search","/comment/write").permitAll();
             authorize.requestMatchers("/**","/write").hasRole("USER");
         });
         return http.build();

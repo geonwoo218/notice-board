@@ -136,6 +136,7 @@ input[type="password"]{
     transform: translate(-50%, -49%);
     z-index: 999;
     border-radius: 25px;
+    display: none;
 }
 
 #imageList {

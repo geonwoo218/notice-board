@@ -3,18 +3,20 @@ package com.example.board.Controller;
 import com.example.board.Entity.Comment;
 import com.example.board.Entity.Notice;
 import com.example.board.Entity.User;
+import com.example.board.Repository.CommentRepository;
 import com.example.board.Repository.UserRepository;
 import com.example.board.Service.NoticeService;
 import com.example.board.Service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.*;
 import java.util.List;
 
 @Controller
@@ -37,6 +39,8 @@ public class NoticeController {
         } else {
             model.addAttribute("userName", user.getName());
             model.addAttribute("userEmail",user.getEmail());
+            int img = userService.getImgNumber(user.getIdx());
+            model.addAttribute("profileImg","/image/img" + img + ".png");
         }
         return "write";
     }
@@ -59,16 +63,14 @@ public class NoticeController {
         } else {
             model.addAttribute("userName", user.getName());
             model.addAttribute("userEmail", user.getEmail());
+            int img = userService.getImgNumber(user.getIdx());
+            model.addAttribute("profileImg","/image/img" + img + ".png");
         }
-        model.addAttribute("comment",noticeService.commentSearch(checkIdx));
+        List<Comment> cList = noticeService.findComment(checkIdx);
+        model.addAttribute("commentData",cList);
         return "noticeShow";
     }
-    @PostMapping("/comment/write")
-    public String commentWrite(Comment comment){
-        noticeService.saveComment(comment);
 
-        return "redirect:/boardShow?checkIdx="+comment.getBoardid();
-    }
     @PostMapping("/boardShow/deleteW")
     public String borderDelete(@RequestParam Long idx){
         noticeService.boardDelete(idx);
@@ -81,6 +83,8 @@ public class NoticeController {
         model.addAttribute("notice", notice);
         model.addAttribute("userName", user.getName());
         model.addAttribute("userEmail", user.getEmail());
+        int img = userService.getImgNumber(user.getIdx());
+        model.addAttribute("profileImg","/image/img" + img + ".png");
         return "writeEdit";
     }
 
@@ -90,4 +94,71 @@ public class NoticeController {
         return "redirect:/";
     }
 
+
+    @PostMapping("/comment/write") //댓글 쓰기
+    public String commentWrite(RedirectAttributes rttr, @RequestParam("boardid") Long boardid, @RequestParam("comment") String comment,
+                               @AuthenticationPrincipal User user){
+        noticeService.commentSave(boardid,comment, user);
+        rttr.addFlashAttribute("result",true);
+        return "redirect:/boardShow?checkIdx="+boardid;
+    }
+
+    @GetMapping("/comment/delete")
+    public String commentDelete(@RequestParam("idx") Long idx, @RequestParam("boardid") Long boardid, RedirectAttributes rttr){
+        noticeService.commentDelete(idx);
+        rttr.addFlashAttribute("result",true);
+        return "redirect:/boardShow?checkIdx="+boardid;
+    }
+
+    @RequestMapping("/multiImageUploader.do")
+    public void multiplePhotoUpload(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String sFileInfo = "";
+            String filename = request.getHeader("file-name");
+            String filename_ext = filename.substring(filename.lastIndexOf(".") + 1);
+            filename_ext = filename_ext.toLowerCase();
+
+            // 프로젝트의 static 디렉토리 경로를 설정
+            String dftFilePath = new File("target/classes/static/NoticeImg").getAbsolutePath();
+            String filePath = dftFilePath + File.separator;
+            File file = new File(filePath);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+
+            String rlFileNm = filePath + filename;
+            File uploadFile = new File(rlFileNm);
+            int counter = 1;
+            while (uploadFile.exists()) {
+                rlFileNm = filePath + filename.substring(0, filename.lastIndexOf(".")) + "_" + counter + "." + filename_ext;
+                uploadFile = new File(rlFileNm);
+                counter++;
+            }
+
+            InputStream is = request.getInputStream();
+            OutputStream os = new FileOutputStream(rlFileNm);
+            int numRead;
+            byte[] b = new byte[Integer.parseInt(request.getHeader("file-size"))];
+            while ((numRead = is.read(b, 0, b.length)) != -1) {
+                os.write(b, 0, numRead);
+            }
+
+            if (is != null) {
+                is.close();
+            }
+            os.flush();
+            os.close();
+
+            sFileInfo += "&bNewLine=true";
+            sFileInfo += "&sFileName=" + filename;
+            sFileInfo += "&sFileURL=" + "/NoticeImg/" + uploadFile.getName();
+
+            PrintWriter print = response.getWriter();
+            print.print(sFileInfo);
+            print.flush();
+            print.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
